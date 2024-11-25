@@ -15,7 +15,7 @@ app.get('/api/weather/city', async (req, res) => {
         const response = await axios.get(`http://jouni-weather.runasp.net/api/weather/city?city=${city}`);
         res.json(response.data);
     } catch (err) {
-        res.status(500).send('Error fetching data from API');
+        res.status(404).json({ cod: "404", Message: "City not found or API call failed." });
     }
 });
 
@@ -26,7 +26,7 @@ app.get('/api/weather/LatLon', async (req, res) => {
         const response = await axios.get(url);
         res.json(response.data);
     } catch (err) {
-        res.status(500).send('Error fetching data from API');
+        res.status(404).json({ cod: "404", Message: "City not found or API call failed." });
     }
 });
 
