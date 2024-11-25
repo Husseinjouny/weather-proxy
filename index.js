@@ -1,30 +1,33 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors'); // Import cors
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Proxy endpoint to fetch weather data
+// Enable CORS for specific origin
+app.use(cors({
+    origin: 'https://jouni-weather.netlify.app', // Allow only your frontend domain
+}));
+
 app.get('/api/weather/city', async (req, res) => {
     try {
         const { city } = req.query;
         const response = await axios.get(`http://jouni-weather.runasp.net/api/weather/city?city=${city}`);
         res.json(response.data);
     } catch (err) {
-        console.error('Error fetching data:', err.message);
         res.status(500).send('Error fetching data from API');
     }
 });
 
-app.get('/api/weather/latlon', async (req, res) => {
+app.get('/api/weather/LatLon', async (req, res) => {
     try {
         const { lat, lon } = req.query;
-        const response = await axios.get(`http://jouni-weather.runasp.net/api/weather/LatLon?lat=${lat}&lon=${lon}`);
+        const url = `http://jouni-weather.runasp.net/api/weather/LatLon?lat=${lat}&lon=${lon}`;
+        const response = await axios.get(url);
         res.json(response.data);
     } catch (err) {
-        console.error('Error fetching data:', err.message);
         res.status(500).send('Error fetching data from API');
     }
 });
 
-// Start the server
 app.listen(PORT, () => console.log(`Proxy server running on port ${PORT}`));
